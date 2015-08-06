@@ -1,0 +1,31 @@
+
+
+/***********************/
+/* Clean Sticky Footer */
+/***********************/
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+#container {
+    width: 90%;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin-bottom: -141px;
+    margin-left: 10px;
+}
+
+#content {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 141px;
+    padding-left: 10px;
+}
