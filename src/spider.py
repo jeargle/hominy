@@ -29,5 +29,7 @@ if __name__=='__main__':
     for link in soup.find_all('a'):
         print ' ', link.get('href')
 
+    # remove script elements
+    [s.extract() for s in soup('script')]
     print '*** Text:'
     print soup.get_text()   # print page text
