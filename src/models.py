@@ -4,13 +4,36 @@
 import sys
 
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, Numeric, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 engine = create_engine('sqlite:///test.db', echo=True)
 Base = declarative_base()
 
+
+
+class Place(Base):
+    """
+    Physical location.
+    """
+    __tablename__ = 'places'
+
+    id = Column(Integer, primary_key=True)
+    country = Column(String)
+    state = Column(String)
+    county = Column(String)
+    city = Column(String)
+    street = Column(String)
+    street_id = Column(String)   # street number
+    unit = Column(String)        # unit/apt number
+    postal_code = Column(String)
+    latitude = Column(Numeric)
+    longitude = Column(Numeric)
+
+    def __repr__(self):
+        return "<Place(country='%s', state='%s', street_id='%s', street='%s')>" % (
+            self.country, self.state, self.street_id, self.street)
 
 
 class Organization(Base):
@@ -23,6 +46,7 @@ class Organization(Base):
     name = Column(String)
     url = Column(String)
     user_url = Column(String)
+    address = Column(Integer, ForeignKey('places.id'))
 
     def __repr__(self):
         return "<Organization(name='%s', url='%s', user_url='%s')>" % (
@@ -39,6 +63,7 @@ class Person(Base):
     name = Column(String)
     fullname = Column(String)
     sex = Column(String)
+    address = Column(Integer, ForeignKey('places.id'))
 
     def __repr__(self):
         return "<Person(name='%s', fullname='%s')>" % (
@@ -61,7 +86,6 @@ class Account(Base):
             self.name, self.url)
 
 
-
 Base.metadata.create_all(engine)
 
 
@@ -70,9 +94,16 @@ if __name__=='__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
+    reddit_address = Place(country='USA', state='CA',
+                           city='San Francisco', street='3rd Street',
+                           street_id='520', postal_code='94107')
+    session.add(reddit_address)
+    session.commit()
+    
     reddit = Organization(name='reddit',
                           url='http://www.reddit.com',
-                          user_url='http://www.reddit.com/u/')
+                          user_url='http://www.reddit.com/u',
+                          address=reddit_address.id)
     session.add(reddit)
     freenode = Organization(name='freenode',
                             url='irc://irc.freenode.org')
