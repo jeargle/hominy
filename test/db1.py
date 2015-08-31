@@ -10,7 +10,6 @@ from sqlalchemy.orm import sessionmaker
 from src.models import Base, Place, Organization, Person, Account
 
 engine = create_engine('sqlite:///test.db', echo=True)
-
 Base.metadata.create_all(engine)
 
 
