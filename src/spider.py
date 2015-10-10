@@ -10,14 +10,14 @@ import requests
 
 
 
-class RedditUser:
+class RedditCheck:
 
     def __init__(self, username):
         self.username = username
         self.url = 'http://www.reddit.com/user/' + username
 
         
-class GithubUser:
+class GithubCheck:
 
 
     def __init__(self, username):
@@ -25,6 +25,18 @@ class GithubUser:
         self.url = 'http://github.com/' + username
 
 
+class CrunchBaseCheck:
+
+    def __init__(self, name=None, org=None):
+        self.name = name
+        self.org = org
+        
+        if name is not None:
+            self.name_url = 'http://www.crunchbase.com/person/' + name + '#/entity'
+        if org is not None:
+            self.org_url = 'http://www.crunchbase.com/organization/' + org + '#/entity'
+
+        
 class Generic:
 
     def __init__(self, url):
