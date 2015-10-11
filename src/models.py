@@ -43,13 +43,13 @@ class Organization(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    url = Column(String)
-    user_url = Column(String)
+    webpage = Column(Integer, ForeignKey('webpages.id'))
+    user_webpage = Column(Integer, ForeignKey('webpages.id'))
     address = Column(Integer, ForeignKey('places.id'))
 
     def __repr__(self):
         return "<Organization(name='%s', url='%s', user_url='%s')>" % (
-            self.name, self.url, self.user_url)
+            self.name, self.webpage.url, self.user_webpage.url)
 
 
 class Person(Base):
@@ -69,6 +69,21 @@ class Person(Base):
             self.name, self.fullname)
 
 
+class Webpage(Base):
+    """
+    Identity associated with an online community.
+    """
+    __tablename__ = 'webpages'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    url = Column(String)
+
+    def __repr__(self):
+        return "<Webpage(name='%s', url='%s')>" % (
+            self.name, self.url)
+
+
 class Account(Base):
     """
     Identity associated with an online community.
@@ -76,13 +91,14 @@ class Account(Base):
     __tablename__ = 'accounts'
 
     id = Column(Integer, primary_key=True)
+    name = Column(String)
     person = Column(Integer, ForeignKey('people.id'))
     organization = Column(Integer, ForeignKey('organizations.id'))
-    name = Column(String)
+    webpage = Column(Integer, ForeignKey('webpages.id'))
 
     def __repr__(self):
-        return "<User(name='%s', url='%s')>" % (
-            self.name, self.url)
+        return "<Account(name='%s', url='%s')>" % (
+            self.name, self.webpage.url)
 
 
 
