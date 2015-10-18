@@ -19,7 +19,6 @@ class RedditCheck:
         
 class GithubCheck:
 
-
     def __init__(self, username):
         self.username = username
         self.url = 'http://github.com/' + username
