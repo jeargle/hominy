@@ -1,13 +1,19 @@
 # John Eargle
 # 2015
 
+# Dependencies:
+#   BeautifulSoup
+#   nltk
+#   requests
+#   robotexclusionrulesparser
+
 import sys
 import json
 
 from bs4 import BeautifulSoup
 # import nltk
 import requests
-
+import robotexclusionrulesparser as rerp
 
 
 class GenericUrl:
@@ -67,7 +73,14 @@ class UrlCheck:
         print 'status:', req.status_code
         print 'headers:', req.headers
         print 'encoding:', req.encoding
-            
+
+    def check_robots(self):
+        rp = rerp.RobotFileParserLookalike()
+        rp.set_url(self.url_base + 'robots.txt')
+        rp.read()
+        rp.can_fetch('*', self.url_base + 'blah')
+        rp.can_fetch('*', self.url_base + 'moo.xml')
+        
 
 class RedditCheck(UrlCheck):
 
@@ -105,3 +118,5 @@ if __name__=='__main__':
 
     rc1 = RedditCheck()
     ghc1 = GithubCheck()
+
+    
