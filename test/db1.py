@@ -30,9 +30,10 @@ if __name__=='__main__':
                           url='http://www.reddit.com/u',
     )
     reddit = Organization(name='reddit',
-                          webpage=reddit_main.id,
-                          user_webpage=reddit_user.id,
-                          address=reddit_address.id)
+                          webpage=reddit_main.webpage_id,
+                          user_webpage=reddit_user.webpage_id,
+                          # addresses=[reddit_address.place_id],
+    )
     session.add(reddit_main)
     session.add(reddit_user)
     session.add(reddit)
@@ -40,7 +41,7 @@ if __name__=='__main__':
     freenode_main = Webpage(name='freenode',
                             url='irc://irc.freenode.org')
     freenode = Organization(name='freenode',
-                            webpage=freenode_main.id)
+                            webpage=freenode_main.webpage_id)
     session.add(freenode_main)
     session.add(freenode)
 
@@ -50,9 +51,9 @@ if __name__=='__main__':
     session.add(dummy1)
     session.commit()
 
-    dummy_reddit = Account(organization=reddit.id, person=dummy1.id, name='dummy')
+    dummy_reddit = Account(organization=reddit.org_id, person=dummy1.person_id, name='dummy')
     session.add(dummy_reddit)
-    dummy_irc = Account(organization=freenode.id, person=dummy1.id, name='dummy')
+    dummy_irc = Account(organization=freenode.org_id, person=dummy1.person_id, name='dummy')
     session.add(dummy_irc)
 
     session.commit()

@@ -5,8 +5,9 @@ import sys
 
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, Numeric, String, ForeignKey
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 
 Base = declarative_base()
 
@@ -18,7 +19,7 @@ class Place(Base):
     """
     __tablename__ = 'place'
 
-    id = Column(Integer, primary_key=True)
+    place_id = Column(Integer, primary_key=True)
     country = Column(String)
     state = Column(String)
     county = Column(String)
@@ -41,11 +42,16 @@ class Organization(Base):
     """
     __tablename__ = 'organization'
 
-    id = Column(Integer, primary_key=True)
+    org_id = Column(Integer, primary_key=True)
     name = Column(String)
-    webpage = Column(Integer, ForeignKey('webpage.id'))
-    user_webpage = Column(Integer, ForeignKey('webpage.id'))
-    address = Column(Integer, ForeignKey('place.id'))
+    webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
+    user_webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
+    organization_places = relationship(
+        'OrganizationPlace',
+        viewonly=True,
+        primaryjoin="Organization.org_id == OrganizationPlace.org_id")
+    addresses = association_proxy('organization_places', 'place',
+                              )
 
     def __repr__(self):
         return "<Organization(name='%s', url='%s', user_url='%s')>" % (
@@ -58,11 +64,16 @@ class Person(Base):
     """
     __tablename__ = 'person'
 
-    id = Column(Integer, primary_key=True)
+    person_id = Column(Integer, primary_key=True)
     name = Column(String)
     fullname = Column(String)
     sex = Column(String)
-    address = Column(Integer, ForeignKey('place.id'))
+    person_places = relationship(
+        'PersonPlace',
+        viewonly=True,
+        primaryjoin="Person.person_id == PersonPlace.person_id")
+    addresses = association_proxy('person_places', 'place',
+                              )
 
     def __repr__(self):
         return "<Person(name='%s', fullname='%s')>" % (
@@ -75,7 +86,7 @@ class Webpage(Base):
     """
     __tablename__ = 'webpage'
 
-    id = Column(Integer, primary_key=True)
+    webpage_id = Column(Integer, primary_key=True)
     name = Column(String)
     url = Column(String)
 
@@ -90,16 +101,52 @@ class Account(Base):
     """
     __tablename__ = 'account'
 
-    id = Column(Integer, primary_key=True)
+    account_id = Column(Integer, primary_key=True)
     name = Column(String)
-    person = Column(Integer, ForeignKey('person.id'))
-    organization = Column(Integer, ForeignKey('organization.id'))
-    webpage = Column(Integer, ForeignKey('webpage.id'))
+    person = Column(Integer, ForeignKey('person.person_id'))
+    organization = Column(Integer, ForeignKey('organization.org_id'))
+    webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
 
     def __repr__(self):
         return "<Account(name='%s', url='%s')>" % (
             self.name, self.webpage.url)
 
+
+class OrganizationPlace(Base):
+    """
+    Association table for Organizations and Places with many-to-many semantics.
+    """
+
+    __tablename__ = 'organization_place'
+
+    org_id = Column(Integer, ForeignKey(Organization.org_id),
+                             primary_key=True)
+    place_id = Column(Integer, ForeignKey(Place.place_id),
+                      primary_key=True)
+    
+    # sort_id = Column(Integer, primary_key=True)
+
+    organization = relationship(Organization, foreign_keys=[org_id])
+    place = relationship(Place, foreign_keys=[place_id])
+    
+
+class PersonPlace(Base):
+    """
+    Association table for People and Places with many-to-many semantics.
+    """
+
+    __tablename__ = 'person_place'
+
+    person_id = Column(Integer, ForeignKey(Person.person_id),
+                             primary_key=True)
+    place_id = Column(Integer, ForeignKey(Place.place_id),
+                      primary_key=True)
+    
+    # sort_id = Column(Integer, primary_key=True)
+
+    person = relationship(Person, foreign_keys=[person_id])
+    place = relationship(Place, foreign_keys=[place_id])
+    
 
 
 if __name__=='__main__':
