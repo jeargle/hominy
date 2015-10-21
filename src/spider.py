@@ -5,7 +5,7 @@
 #   BeautifulSoup
 #   nltk
 #   requests
-#   robotexclusionrulesparser
+#   robotexclusionrulesparser - handles wildcards (unlike robotparser)
 
 import sys
 import json
@@ -89,6 +89,12 @@ class RedditCheck(UrlCheck):
                           user_suffix='user/%s')
 
         
+class TwitterCheck(UrlCheck):
+
+    def __init__(self):
+        UrlCheck.__init__(self, 'http://twitter.com/')
+
+        
 class GithubCheck(UrlCheck):
 
     def __init__(self):
@@ -97,7 +103,7 @@ class GithubCheck(UrlCheck):
 
 class CrunchBaseCheck(UrlCheck):
 
-    def __init__(self, username=None, org=None):
+    def __init__(self):
         UrlCheck.__init__(self, 'http://www.crunchbase.com/',
                           user_suffix='person/%s#/entity',
                           org_suffix='organization/%s#/entity')
@@ -117,6 +123,7 @@ if __name__=='__main__':
     # g.text()
 
     rc1 = RedditCheck()
-    ghc1 = GithubCheck()
+    tc1 = TwitterCheck()
+    gc1 = GithubCheck()
+    cbc1 = CrunchBaseCheck()
 
-    
