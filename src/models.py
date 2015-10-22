@@ -9,8 +9,9 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-Base = declarative_base()
 
+
+Base = declarative_base()
 
 
 class Place(Base):
@@ -31,6 +32,37 @@ class Place(Base):
     latitude = Column(Numeric)
     longitude = Column(Numeric)
 
+    organization_places = relationship('OrganizationPlace')
+    organizations = association_proxy(
+        'organization_places',
+        'organization')
+
+    person_places = relationship('PersonPlace')
+    people = association_proxy(
+        'person_places',
+        'person')
+    
+    # organization_places = relationship(
+    #     'OrganizationPlace', back_populates='organization',
+    #     foreign_keys='OrganizationPlace.org_id',
+    #     primaryjoin='OrganizationPlace.place_id == place.place_id',
+    #     collection_class=set,
+    #     cascade='all,delete-orphan')
+    # organizations = association_proxy(
+    #     'organization_places', 'organization',
+    #     creator=lambda x: OrganizationPlace(organization=x[0]) \
+    #     if type(x) == tuple else OrganizationPlace(organization=x))
+
+    # person_places = relationship(
+    #     'PersonPlace', back_populates='person',
+    #     foreign_keys='PersonPlace.person_id',
+    #     collection_class=set,
+    #     cascade='all,delete-orphan')
+    # people = association_proxy(
+    #     'person_places', 'person',
+    #     creator=lambda x: PersonPlace(person=x[0]) \
+    #     if type(x) == tuple else PersonPlace(person=x))
+    
     def __repr__(self):
         return "<Place(country='%s', state='%s', street_id='%s', street='%s')>" % (
             self.country, self.state, self.street_id, self.street)
@@ -46,13 +78,28 @@ class Organization(Base):
     name = Column(String)
     webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
     user_webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
-    organization_places = relationship(
-        'OrganizationPlace',
-        viewonly=True,
-        primaryjoin="Organization.org_id == OrganizationPlace.org_id")
-    addresses = association_proxy('organization_places', 'place',
-                              )
+    # organization_places = relationship(
+    #     'OrganizationPlace',
+    #     viewonly=True,
+    #     primaryjoin="Organization.org_id == OrganizationPlace.org_id")
+    # addresses = association_proxy('organization_places', 'place',
+    #                           )
 
+    organization_places = relationship('OrganizationPlace')
+    addresses = association_proxy('organization_places', 'place')
+    # organization_places = relationship(
+    #     'OrganizationPlace', back_populates='place',
+    #     foreign_keys='OrganizationPlace.place_id',
+    #     primaryjoin='OrganizationPlace.org_id == Organization.org_id',
+    #     collection_class=set,
+    #     cascade='all,delete-orphan')
+    # addresses = association_proxy(
+    #     'organization_places', 'place',
+    #     creator=lambda x: OrganizationPlace(place=x[0]) \
+    #     if type(x) == tuple else OrganizationPlace(place=x))
+
+
+    
     def __repr__(self):
         return "<Organization(name='%s', url='%s', user_url='%s')>" % (
             self.name, self.webpage.url, self.user_webpage.url)
@@ -68,12 +115,28 @@ class Person(Base):
     name = Column(String)
     fullname = Column(String)
     sex = Column(String)
-    person_places = relationship(
-        'PersonPlace',
-        viewonly=True,
-        primaryjoin="Person.person_id == PersonPlace.person_id")
-    addresses = association_proxy('person_places', 'place',
-                              )
+
+    person_places = relationship('PersonPlace')
+    addresses = association_proxy('person_places', 'place')
+
+    # person_places = relationship(
+    #     'PersonPlace',
+    #     viewonly=True,
+    #     primaryjoin="Person.person_id == PersonPlace.person_id")
+    # addresses = association_proxy('person_places', 'place',
+    #                           )
+
+    # person_places = relationship(
+    #     'PersonPlace', back_populates='place',
+    #     foreign_keys='PersonPlace.place_id',
+    #     # foreign_keys='person_place.place_id',
+    #     collection_class=set,
+    #     cascade='all,delete-orphan')
+    # addresses = association_proxy(
+    #     'person_places', 'place',
+    #     creator=lambda x: PersonPlace(place=x[0]) \
+    #     if type(x) == tuple else PersonPlace(place=x))
+    
 
     def __repr__(self):
         return "<Person(name='%s', fullname='%s')>" % (
@@ -116,19 +179,18 @@ class OrganizationPlace(Base):
     """
     Association table for Organizations and Places with many-to-many semantics.
     """
-
     __tablename__ = 'organization_place'
-
-    org_id = Column(Integer, ForeignKey(Organization.org_id),
-                             primary_key=True)
-    place_id = Column(Integer, ForeignKey(Place.place_id),
-                      primary_key=True)
     
-    # sort_id = Column(Integer, primary_key=True)
+    org_id = Column(Integer, ForeignKey('organization.org_id'), primary_key=True)
+    place_id = Column(Integer, ForeignKey('place.place_id'), primary_key=True)
 
-    organization = relationship(Organization, foreign_keys=[org_id])
-    place = relationship(Place, foreign_keys=[place_id])
-    
+#     org_id = Column(Integer, ForeignKey('organization.org_id'), primary_key=True)
+#     place_id = Column(Integer, ForeignKey('place.place_id'), primary_key=True)
+
+#     organization = relationship('organization', foreign_keys=[org_id],
+#                                 remote_side=[])
+#     place = relationship('place', foreign_keys=[place_id])
+
 
 class PersonPlace(Base):
     """
@@ -142,10 +204,8 @@ class PersonPlace(Base):
     place_id = Column(Integer, ForeignKey(Place.place_id),
                       primary_key=True)
     
-    # sort_id = Column(Integer, primary_key=True)
-
-    person = relationship(Person, foreign_keys=[person_id])
-    place = relationship(Place, foreign_keys=[place_id])
+#     person = relationship(Person, foreign_keys=[person_id])
+#     place = relationship(Place, foreign_keys=[place_id])
     
 
 
