@@ -32,9 +32,9 @@ class Place(Base):
     latitude = Column(Numeric)
     longitude = Column(Numeric)
 
-    organization_places = relationship('OrganizationPlace')
+    org_places = relationship('OrganizationPlace')
     organizations = association_proxy(
-        'organization_places',
+        'org_places',
         'organization')
 
     person_places = relationship('PersonPlace')
@@ -58,8 +58,8 @@ class Organization(Base):
     webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
     user_webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
 
-    organization_places = relationship('OrganizationPlace')
-    addresses = association_proxy('organization_places', 'place')
+    org_places = relationship('OrganizationPlace')
+    addresses = association_proxy('org_places', 'place')
     
     def __repr__(self):
         return "<Organization(name='%s', url='%s', user_url='%s')>" % (
@@ -138,6 +138,20 @@ class PersonPlace(Base):
                              primary_key=True)
     place_id = Column(Integer, ForeignKey(Place.place_id),
                       primary_key=True)
+
+
+class PersonPerson(Base):
+    """
+    Association table for People with other People with many-to-many semantics.
+    """
+
+    __tablename__ = 'person_person'
+
+    parent_id = Column(Integer, ForeignKey(Person.person_id),
+                       primary_key=True)
+    child_id = Column(Integer, ForeignKey(Person.person_id),
+                      primary_key=True)
+    label = Column(String)
     
 
 
