@@ -46,17 +46,28 @@ class GenericUrl:
 
 
 class UrlCheck:
+    """
+    Base class for URL checkers.  Check a given URL for specific
+    users and/or organizations.  The robots.txt files is grabbed
+    and checked first in order to avoid banned pages.
+    """
 
     def __init__(self, url_base, user_suffix='%s', org_suffix='%s'):
         self.url_base = url_base
         self.user_suffix = user_suffix
         self.org_suffix = org_suffix
+        self.rp = None
 
     def check_user(self, user):
         if self.user_suffix is None:
             return None
+        if self.rp is None:
+            self.check_robots()
         
         url = (self.url_base + self.user_suffix) % (user)
+        if not self.rp.can_fetch('*', url):
+            return None
+
         req = requests.get(url)
         print 'url:', url
         print 'status:', req.status_code
@@ -66,8 +77,13 @@ class UrlCheck:
     def check_org(self, org):
         if self.org_suffix is None:
             return None
+        if self.rp is None:
+            self.check_robots()
 
         url = (self.url_base + self.org_suffix) % (org)
+        if not self.rp.can_fetch('*', url):
+            return None
+
         req = requests.get(url)
         print 'url:', url
         print 'status:', req.status_code
@@ -75,14 +91,15 @@ class UrlCheck:
         print 'encoding:', req.encoding
 
     def check_robots(self):
-        rp = rerp.RobotFileParserLookalike()
-        rp.set_url(self.url_base + 'robots.txt')
-        rp.read()
-        rp.can_fetch('*', self.url_base + 'blah')
-        rp.can_fetch('*', self.url_base + 'moo.xml')
+        self.rp = rerp.RobotFileParserLookalike()
+        self.rp.set_url(self.url_base + 'robots.txt')
+        self.rp.read()
         
 
 class RedditCheck(UrlCheck):
+    """
+    URL checker for reddit.
+    """
 
     def __init__(self):
         UrlCheck.__init__(self, 'http://www.reddit.com/',
@@ -90,18 +107,27 @@ class RedditCheck(UrlCheck):
 
         
 class TwitterCheck(UrlCheck):
+    """
+    URL checker for Twitter.
+    """
 
     def __init__(self):
         UrlCheck.__init__(self, 'http://twitter.com/')
 
         
 class GithubCheck(UrlCheck):
+    """
+    URL checker for GitHub.
+    """
 
     def __init__(self):
         UrlCheck.__init__(self, 'http://github.com/')
 
 
 class CrunchBaseCheck(UrlCheck):
+    """
+    URL checker for CrunchBase.
+    """
 
     def __init__(self):
         UrlCheck.__init__(self, 'http://www.crunchbase.com/',
@@ -122,8 +148,13 @@ if __name__=='__main__':
     # g.kill_scripts()
     # g.text()
 
+    if len(sys.argv) > 1:
+        username = sys.argv[1]
+        
     rc1 = RedditCheck()
-    tc1 = TwitterCheck()
-    gc1 = GithubCheck()
-    cbc1 = CrunchBaseCheck()
+    rc1.check_user(username)
+    
+    # tc1 = TwitterCheck()
+    # gc1 = GithubCheck()
+    # cbc1 = CrunchBaseCheck()
 
