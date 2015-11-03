@@ -18,13 +18,12 @@ class IndexHandler(web.RequestHandler):
         self.render('hominy.html')
 
 
-app = web.Application([
-    (r'/', IndexHandler),
-    (r'/alpha/(.*)', web.StaticFileHandler, {'path': '../../../alpha/'}),
-    (r'/static/(.*)', web.StaticFileHandler, {'path': '../../www/'}),
-    (r'/local_static/(.*)', web.StaticFileHandler, {'path': './'}),
-],
-                      debug = True
+app = web.Application(
+    [(r'/', IndexHandler),
+     (r'/static/(.*)', web.StaticFileHandler, {'path': '../../www/'}),
+     (r'/local_static/(.*)', web.StaticFileHandler, {'path': './'}),
+    ],
+    debug = True
 )
 
 if __name__=='__main__':
