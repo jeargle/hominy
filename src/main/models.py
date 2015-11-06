@@ -232,9 +232,9 @@ class Account(Element):
                         ForeignKey(Element.element_id),
                         primary_key=True)
     # name = Column(String)
-    person = Column(Integer, ForeignKey('person.person_id'))
-    organization = Column(Integer, ForeignKey('organization.org_id'))
-    webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
+    person_id = Column(Integer, ForeignKey('person.person_id'))
+    organization_id = Column(Integer, ForeignKey('organization.org_id'))
+    webpage_id = Column(Integer, ForeignKey('webpage.webpage_id'))
 
     __mapper_args__ = {
         'polymorphic_identity': CLS_INDEX['Account'],

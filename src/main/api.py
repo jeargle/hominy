@@ -3,7 +3,21 @@
 
 # CRUD functions for hominy models
 
-from src.main.models import Base, Place, Organization, Person, Webpage, Account
+from src.main.models import Base, Element, Place, Organization, Person, Webpage, Account
+
+
+def __apply_element_filters(query, session=None, **filters):
+
+    target_filters = [
+        'uuid', 'name', 'url', 'desc', 'element_class',
+    ]
+
+    for tf in target_filters:
+        if tf in filters:
+            query = query.filter(Element.getattr(tf) == filters[tf])
+            filters.pop(tf)
+
+    return query
 
 
 def __apply_filters(query, target, session=None, **filters):
@@ -17,15 +31,19 @@ def __apply_filters(query, target, session=None, **filters):
         ]
     elif target == Organization:
         target_filters = [
+            'webpage', 'user_webpage',
         ]
     elif target == Person:
         target_filters = [
+            'fullname', 'sex',
         ]
     elif target == Webpage:
         target_filters = [
+            'webpage_url',
         ]
     elif target == Account:
         target_filters = [
+            'person', 'organization', 'webpage',
         ]
     
     for tf in target_filters:
@@ -33,6 +51,7 @@ def __apply_filters(query, target, session=None, **filters):
             query = query.filter(target.getattr(tf) == filters[tf])
             filters.pop(tf)
 
+    query = __apply_element_filters(query, session, filters)
     return query
 
 
