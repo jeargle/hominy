@@ -59,10 +59,17 @@ def __apply_filters(query, target, session=None, **filters):
 # Place
 #
 
-def create_place():
-    pass
+def create_place(session=None, **values):
+    time = datetime.utcnow()
 
-def request_place(filters=None, session=None, agent=None):
+    place = Place(created_timestamp=timestamp, **values)
+    session.add(place)
+    session.flush()
+
+    return place.as_dict()
+
+
+def request_place(filters=None, session=None):
     filters = filters or {}
 
     # Place
@@ -84,10 +91,17 @@ def delete_place():
 # Organization
 #
 
-def create_organization():
-    pass
+def create_organization(session=None, **values):
+    time = datetime.utcnow()
 
-def request_organization(filters=None, session=None, agent=None):
+    org = Organization(created_timestamp=timestamp, **values)
+    session.add(org)
+    session.flush()
+
+    return org.as_dict()
+
+
+def request_organization(filters=None, session=None):
     filters = filters or {}
 
     # Organization
@@ -98,8 +112,10 @@ def request_organization(filters=None, session=None, agent=None):
 
     return o_dicts
 
+
 def update_organization():
     pass
+
 
 def delete_organization():
     pass
@@ -109,10 +125,17 @@ def delete_organization():
 # Person
 #
 
-def create_person():
-    pass
+def create_person(session=None, **values):
+    time = datetime.utcnow()
 
-def request_person(filters=None, session=None, agent=None):
+    person = Person(created_timestamp=timestamp, **values)
+    session.add(person)
+    session.flush()
+
+    return person.as_dict()
+
+
+def request_person(filters=None, session=None):
     filters = filters or {}
 
     # Person
@@ -123,8 +146,10 @@ def request_person(filters=None, session=None, agent=None):
 
     return p_dicts
 
+
 def update_person():
     pass
+
 
 def delete_person():
     pass
@@ -134,10 +159,17 @@ def delete_person():
 # Webpage
 #
 
-def create_webpage():
-    pass
+def create_webpage(session=None, **values):
+    time = datetime.utcnow()
 
-def request_webpage(filters=None, session=None, agent=None):
+    webpage = Webpage(created_timestamp=timestamp, **values)
+    session.add(webpage)
+    session.flush()
+
+    return webpage.as_dict()
+
+
+def request_webpage(filters=None, session=None):
     filters = filters or {}
 
     # Webpage
@@ -148,8 +180,10 @@ def request_webpage(filters=None, session=None, agent=None):
 
     return w_dicts
 
+
 def update_webpage():
     pass
+
 
 def delete_webpage():
     pass
@@ -159,10 +193,17 @@ def delete_webpage():
 # Account
 #
 
-def create_account():
-    pass
+def create_account(session=None, **values):
+    time = datetime.utcnow()
 
-def request_account(filters=None, session=None, agent=None):
+    account = Account(created_timestamp=timestamp, **values)
+    session.add(account)
+    session.flush()
+
+    return account.as_dict()
+
+
+def request_account(filters=None, session=None):
     filters = filters or {}
 
     # Account
@@ -173,8 +214,10 @@ def request_account(filters=None, session=None, agent=None):
 
     return a_dicts
 
+
 def update_account():
     pass
+
 
 def delete_account():
     pass

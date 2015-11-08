@@ -144,6 +144,22 @@ class Place(Element):
         return "<Place(country='%s', state='%s', street_id='%s', street='%s')>" % (
             self.country, self.state, self.street_id, self.street)
 
+    def as_dict(self):
+        d = Element.as_dict(self)
+
+        d['country'] = self.country
+        d['state'] = self.state
+        d['county'] = self.county
+        d['city'] = self.city
+        d['street'] = self.street
+        d['street_id'] = self.street_id
+        d['unit'] = self.unit
+        d['postal_code'] = self.postal_code
+        d['latitude'] = self.latitude
+        d['longitude'] = self.longitude
+        
+        return d
+
 
 class Organization(Element):
     """
@@ -154,7 +170,6 @@ class Organization(Element):
     org_id = Column(Integer,
                     ForeignKey(Element.element_id),
                     primary_key=True)
-    # name = Column(String)
     webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
     user_webpage = Column(Integer, ForeignKey('webpage.webpage_id'))
 
@@ -170,6 +185,11 @@ class Organization(Element):
     def __repr__(self):
         return "<Organization(name='%s', url='%s', user_url='%s')>" % (
             self.name, self.webpage.url, self.user_webpage.url)
+
+    def as_dict(self):
+        d = Element.as_dict(self)
+
+        return d
 
 
 class Person(Element):
@@ -198,6 +218,14 @@ class Person(Element):
         return "<Person(name='%s', fullname='%s')>" % (
             self.name, self.fullname)
 
+    def as_dict(self):
+        d = Element.as_dict(self)
+
+        d['fullname'] = self.fullname
+        d['sex'] = self.sex
+
+        return d
+    
 
 class Webpage(Element):
     """
@@ -221,6 +249,13 @@ class Webpage(Element):
         return "<Webpage(name='%s', url='%s')>" % (
             self.name, self.url)
 
+    def as_dict(self):
+        d = Element.as_dict(self)
+
+        d['webpage_url'] = self.webpage_url
+
+        return d
+    
 
 class Account(Element):
     """
@@ -246,6 +281,11 @@ class Account(Element):
         return "<Account(name='%s', url='%s')>" % (
             self.name, self.webpage.url)
 
+    def as_dict(self):
+        d = Element.as_dict(self)
+
+        return d
+    
 
 class OrganizationPlace(Base):
     """
