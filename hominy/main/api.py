@@ -3,7 +3,7 @@
 
 # CRUD functions for hominy models
 
-from src.main.models import Base, Element, Place, Organization, Person, Webpage, Account
+from hominy.main.models import Base, Element, Place, Organization, Person, Webpage, Account
 
 
 def __apply_element_filters(query, session=None, **filters):
