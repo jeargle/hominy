@@ -1,14 +1,13 @@
-hominy
-======
+# hominy
+
 
 Simple OSInt database for people, online accounts, and organizations.
 
 
-Dependencies
-------------
+## Dependencies
 
-JavaScript
-~~~~~~~~~~
+
+### JavaScript
 
 The external dependencies are currently linked from [cdnjs.com](https://cdnjs.com).
 
@@ -17,8 +16,7 @@ The external dependencies are currently linked from [cdnjs.com](https://cdnjs.co
 3. Backbone
 4. d3
 
-Python
-~~~~~~
+### Python
 
 1. SQLAlchemy
 2. tornado
