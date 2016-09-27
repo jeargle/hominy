@@ -1,5 +1,5 @@
 # John Eargle
-# 2015
+# 2015-2016
 
 from datetime import datetime
 import sys
@@ -298,7 +298,8 @@ class DataFile(Element):
     datafile_id = Column(Integer,
                          ForeignKey(Element.element_id),
                          primary_key=True)
-    name = Column(String)
+    # path on local filesystem, including final '/'
+    # "self.path + self.name" is the full path
     path = Column(String)
 
     datafile_elements = relationship('DataFileElement')
@@ -310,13 +311,16 @@ class DataFile(Element):
         'inherit_condition': (datafile_id == Element.element_id)
     }
 
+    @property
+    def fullpath(self):
+        return self.path + self.name
+    
     def __repr__(self):
         return "<DataFile(name='%s')>" % (self.name)
 
     def as_dict(self):
         d = Element.as_dict(self)
 
-        d['name'] = self.name
         d['path'] = self.path
 
         return d

@@ -1,5 +1,5 @@
 # John Eargle
-# 2015
+# 2015-2016
 
 # Dependencies:
 #   BeautifulSoup
@@ -27,7 +27,7 @@ class GenericUrl:
         print req.encoding
         html_doc = req.text
         self.soup = BeautifulSoup(html_doc, 'html.parser')
-        
+
     def title(self):
         print '*** Title:', self.soup.title
 
@@ -63,7 +63,7 @@ class UrlCheck:
             return None
         if self.rp is None:
             self.check_robots()
-        
+
         url = (self.url_base + self.user_suffix) % (user)
         if not self.rp.can_fetch('*', url):
             return None
@@ -94,7 +94,7 @@ class UrlCheck:
         self.rp = rerp.RobotFileParserLookalike()
         self.rp.set_url(self.url_base + 'robots.txt')
         self.rp.read()
-        
+
 
 class RedditCheck(UrlCheck):
     """
@@ -105,7 +105,7 @@ class RedditCheck(UrlCheck):
         UrlCheck.__init__(self, 'http://www.reddit.com/',
                           user_suffix='user/%s')
 
-        
+
 class TwitterCheck(UrlCheck):
     """
     URL checker for Twitter.
@@ -114,7 +114,7 @@ class TwitterCheck(UrlCheck):
     def __init__(self):
         UrlCheck.__init__(self, 'http://twitter.com/')
 
-        
+
 class GithubCheck(UrlCheck):
     """
     URL checker for GitHub.
@@ -133,7 +133,7 @@ class CrunchBaseCheck(UrlCheck):
         UrlCheck.__init__(self, 'http://www.crunchbase.com/',
                           user_suffix='person/%s#/entity',
                           org_suffix='organization/%s#/entity')
-        
+
 
 
 if __name__=='__main__':

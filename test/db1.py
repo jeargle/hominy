@@ -1,5 +1,5 @@
 # John Eargle
-# 2015
+# 2015-2016
 
 import sys
 
@@ -65,9 +65,13 @@ if __name__=='__main__':
     session.add(dummy1)
     session.commit()
 
-    dummy_reddit = Account(organization_id=reddit.org_id, person_id=dummy1.person_id, name='dummy')
+    dummy_reddit = Account(organization_id=reddit.org_id,
+                           person_id=dummy1.person_id,
+                           name='dummy')
     session.add(dummy_reddit)
-    dummy_irc = Account(organization_id=freenode.org_id, person_id=dummy1.person_id, name='dummy')
+    dummy_irc = Account(organization_id=freenode.org_id,
+                        person_id=dummy1.person_id,
+                        name='dummy')
     session.add(dummy_irc)
     
     session.commit()
