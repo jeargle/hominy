@@ -31,6 +31,8 @@ CLS_INDEX = {
         'Webpage'              : 400,
         # 5xx for Account related elements
         'Account'              : 500,
+        # 6xx for DataFile related elements
+        'DataFile'             : 600,
 }
 
 # Backwards mapping so it's easy to get the string version of class id
@@ -285,6 +287,39 @@ class Account(Element):
         d = Element.as_dict(self)
 
         return d
+
+
+class DataFile(Element):
+    """
+    Data file which can be assoicated with an arbitrary Element.
+    """
+    __tablename__ = 'datafile'
+
+    datafile_id = Column(Integer,
+                         ForeignKey(Element.element_id),
+                         primary_key=True)
+    name = Column(String)
+    path = Column(String)
+
+    datafile_elements = relationship('DataFileElement')
+    elements = association_proxy('datafile_element', 'element')
+
+    __mapper_args__ = {
+        'polymorphic_identity': CLS_INDEX['DataFile'],
+        'with_polymorphic': '*',
+        'inherit_condition': (datafile_id == Element.element_id)
+    }
+
+    def __repr__(self):
+        return "<DataFile(name='%s')>" % (self.name)
+
+    def as_dict(self):
+        d = Element.as_dict(self)
+
+        d['name'] = self.name
+        d['path'] = self.path
+
+        return d
     
 
 class OrganizationPlace(Base):
@@ -322,6 +357,19 @@ class PersonPerson(Base):
     child_id = Column(Integer, ForeignKey(Person.person_id),
                       primary_key=True)
     label = Column(String)
+
+
+class DataFileElement(Base):
+    """
+    Association table for DataFiles and Elements with many-to-many semantics.
+    """
+
+    __tablename__ = 'datafile_element'
+
+    datafile_id = Column(Integer, ForeignKey(DataFile.datafile_id),
+                         primary_key=True)
+    element_id = Column(Integer, ForeignKey(Element.element_id),
+                        primary_key=True)
     
 
 

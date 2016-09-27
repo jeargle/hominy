@@ -7,7 +7,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from hominy.main.models import Base, Place, Organization, Person, Webpage, Account
+from hominy.main.models import Base, Place, Organization
+from hominy.main.models import Person, Webpage, Account, DataFile
 
 engine = create_engine('sqlite:///test.db', echo=True)
 Base.metadata.create_all(engine)

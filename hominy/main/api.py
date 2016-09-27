@@ -3,7 +3,9 @@
 
 # CRUD functions for hominy models
 
-from hominy.main.models import Base, Element, Place, Organization, Person, Webpage, Account
+from hominy.main.models import Base, Element, Place
+from hominy.main.models import Organization, Person, Webpage
+from hominy.main.models import Account, DataFile
 
 
 def __apply_element_filters(query, session=None, **filters):
@@ -220,5 +222,39 @@ def update_account():
 
 
 def delete_account():
+    pass
+
+
+#
+# DataFile
+#
+
+def create_datafile(session=None, **values):
+    time = datetime.utcnow()
+
+    datafile = DataFile(created_timestamp=timestamp, **values)
+    session.add(datafile)
+    session.flush()
+
+    return datafile.as_dict()
+
+
+def request_datafile(filters=None, session=None):
+    filters = filters or {}
+
+    # DataFile
+    q = session.query(DataFile)
+    q = __apply_filters(q, DataFile, session, **filters)
+
+    a_dicts = [a.as_dict() for a in q.all()]
+
+    return a_dicts
+
+
+def update_datafile():
+    pass
+
+
+def delete_datafile():
     pass
 
