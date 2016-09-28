@@ -1,6 +1,7 @@
 # John Eargle
 # 2015-2016
 
+import os.path
 import sys
 
 from sqlalchemy import create_engine
@@ -51,12 +52,23 @@ def make_freenode(session):
     return freenode
 
 
+def make_datafile(session):
+    path1 = os.path.realpath(__file__)
+    df1 = DataFile(name=os.path.basename(path1),
+                   path=os.path.dirname(path1))
+    session.add(df1)
+
+    return df1
+
+
+
 if __name__=='__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
     reddit = make_reddit(session)
     freenode = make_freenode(session)
+    df1 = make_datafile(session)
 
     john = Person(name='John', fullname='John Doe', sex='m')
     session.add(john)

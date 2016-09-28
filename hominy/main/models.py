@@ -2,6 +2,7 @@
 # 2015-2016
 
 from datetime import datetime
+import os.path
 import sys
 import uuid
 
@@ -298,8 +299,8 @@ class DataFile(Element):
     datafile_id = Column(Integer,
                          ForeignKey(Element.element_id),
                          primary_key=True)
-    # path on local filesystem, including final '/'
-    # "self.path + self.name" is the full path
+    # path on local filesystem, not including final '/'
+    # "os.path.join(self.path, self.name)" is the full path
     path = Column(String)
 
     datafile_elements = relationship('DataFileElement')
@@ -313,7 +314,7 @@ class DataFile(Element):
 
     @property
     def fullpath(self):
-        return self.path + self.name
+        return os.join(self.path, self.name)
     
     def __repr__(self):
         return "<DataFile(name='%s')>" % (self.name)
