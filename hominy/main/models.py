@@ -327,6 +327,30 @@ class DataFile(Element):
         return d
     
 
+class Note(Base):
+    """
+    String which can be assoicated with an arbitrary Element.
+    """
+    __tablename__ = 'note'
+
+    note_id = Column(Integer,
+                     primary_key=True)
+    note = Column(String)
+
+    note_elements = relationship('NoteElement')
+    elements = association_proxy('note_element', 'element')
+
+    def __repr__(self):
+        return "<Note(name='%s')>" % (self.name)
+
+    def as_dict(self):
+        d = Element.as_dict(self)
+
+        d['note'] = self.note
+
+        return d
+
+
 class OrganizationPlace(Base):
     """
     Association table for Organizations and Places with many-to-many semantics.
@@ -373,6 +397,19 @@ class DataFileElement(Base):
 
     datafile_id = Column(Integer, ForeignKey(DataFile.datafile_id),
                          primary_key=True)
+    element_id = Column(Integer, ForeignKey(Element.element_id),
+                        primary_key=True)
+
+
+class NoteElement(Base):
+    """
+    Association table for Notes and Elements with many-to-many semantics.
+    """
+
+    __tablename__ = 'note_element'
+
+    note_id = Column(Integer, ForeignKey(Note.note_id),
+                     primary_key=True)
     element_id = Column(Integer, ForeignKey(Element.element_id),
                         primary_key=True)
     
