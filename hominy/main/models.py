@@ -124,8 +124,7 @@ class Note(Base):
         return "<Note(name='%s')>" % (self.name)
 
     def as_dict(self):
-        d = Element.as_dict(self)
-
+        d = {}
         d['note'] = self.note
 
         return d
