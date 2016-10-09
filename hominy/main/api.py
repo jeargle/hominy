@@ -82,9 +82,9 @@ def request_note(filters=None, session=None):
     q = session.query(Note)
     q = __apply_filters(q, Note, session, **filters)
 
-    p_dicts = [p.as_dict() for p in q.all()]
+    note_dicts = [n.as_dict() for n in q.all()]
 
-    return p_dicts
+    return note_dicts
 
 
 def update_note():
