@@ -61,3 +61,36 @@ def __apply_filters(query, target, session=None, **filters):
     return query
 
 
+#
+# Note
+#
+
+def create_note(session=None, **values):
+    time = datetime.utcnow()
+
+    note = Note(created_timestamp=timestamp, **values)
+    session.add(note)
+    session.flush()
+
+    return note.as_dict()
+
+
+def request_note(filters=None, session=None):
+    filters = filters or {}
+
+    # Note
+    q = session.query(Note)
+    q = __apply_filters(q, Note, session, **filters)
+
+    p_dicts = [p.as_dict() for p in q.all()]
+
+    return p_dicts
+
+
+def update_note():
+    pass
+
+
+def delete_note():
+    pass
+
