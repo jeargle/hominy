@@ -17,6 +17,7 @@ from guid import GUID
 
 from hominy.main.models import CLS_INDEX, CLS_NAMES
 from hominy.main.models import Element, Base
+from hominy.place.models import Place
 
 
 class Organization(Element):
@@ -48,3 +49,13 @@ class Organization(Element):
         d = Element.as_dict(self)
 
         return d
+
+
+class OrganizationPlace(Base):
+    """
+    Association table for Organizations and Places with many-to-many semantics.
+    """
+    __tablename__ = 'organization_place'
+
+    org_id = Column(Integer, ForeignKey('organization.org_id'), primary_key=True)
+    place_id = Column(Integer, ForeignKey('place.place_id'), primary_key=True)

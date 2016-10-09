@@ -130,16 +130,6 @@ class Note(Base):
         return d
 
 
-class OrganizationPlace(Base):
-    """
-    Association table for Organizations and Places with many-to-many semantics.
-    """
-    __tablename__ = 'organization_place'
-    
-    org_id = Column(Integer, ForeignKey('organization.org_id'), primary_key=True)
-    place_id = Column(Integer, ForeignKey('place.place_id'), primary_key=True)
-
-
 class NoteElement(Base):
     """
     Association table for Notes and Elements with many-to-many semantics.
