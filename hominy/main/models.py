@@ -62,6 +62,14 @@ class Element(Base):
     created_timestamp = Column(DateTime, nullable=False)
     updated_timestamp = Column(DateTime, nullable=False)
 
+    element_notes = relationship(
+        'ElementNote', back_populates='element',
+        foreign_keys='ElementNote.element_id',
+        # lazy='joined', join_depth=1,
+        collection_class=attribute_mapped_collection('note_id'),
+        cascade='all, delete-orphan')
+    notes = association_proxy('element_note', 'note')
+
     __mapper_args__ = {
         'polymorphic_on': element_class,
         'polymorphic_identity': CLS_INDEX['Element']
@@ -99,6 +107,10 @@ class Element(Base):
             #'priors' : [(prior.uuid, prior.label) for prior in self.priors]
         }
 
+    def add_note(self, note):
+        
+        return
+    
     def __str__(self):
         return unicode(self).encode('utf-8')
 
@@ -117,8 +129,8 @@ class Note(Base):
                      primary_key=True)
     note = Column(String)
 
-    note_elements = relationship('NoteElement')
-    elements = association_proxy('note_element', 'element')
+    element_notes = relationship('ElementNote')
+    elements = association_proxy('element_note', 'element')
 
     def __repr__(self):
         return "<Note(name='%s')>" % (self.name)
@@ -130,14 +142,19 @@ class Note(Base):
         return d
 
 
-class NoteElement(Base):
+class ElementNote(Base):
     """
-    Association table for Notes and Elements with many-to-many semantics.
+    Association table for Notes and Elements with many-to-one semantics.
     """
 
-    __tablename__ = 'note_element'
+    __tablename__ = 'element_note'
 
     note_id = Column(Integer, ForeignKey(Note.note_id),
                      primary_key=True)
     element_id = Column(Integer, ForeignKey(Element.element_id),
                         primary_key=True)
+
+    note = relationship(Note,
+                        foreign_keys=[note_id])
+    element = relationship(Element,
+                           foreign_keys=[element_id])
