@@ -74,8 +74,10 @@ if __name__=='__main__':
     freenode = make_freenode(session)
     df1 = make_datafile(session)
 
-    note1 = Note(note='Hey, this is my note!')
+    note1 = Note(note='Hey, this is my note!', element=df1)
     session.add(note1)
+    note2 = Note(note='Hey, this is my second note!', element=df1)
+    session.add(note2)
 
     john = Person(name='John', fullname='John Doe', sex='m')
     session.add(john)

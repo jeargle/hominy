@@ -62,13 +62,7 @@ class Element(Base):
     created_timestamp = Column(DateTime, nullable=False)
     updated_timestamp = Column(DateTime, nullable=False)
 
-    element_notes = relationship(
-        'ElementNote', back_populates='element',
-        foreign_keys='ElementNote.element_id',
-        # lazy='joined', join_depth=1,
-        collection_class=attribute_mapped_collection('note_id'),
-        cascade='all, delete-orphan')
-    notes = association_proxy('element_note', 'note')
+    notes = relationship('Note', back_populates='element')
 
     __mapper_args__ = {
         'polymorphic_on': element_class,
@@ -121,7 +115,7 @@ class Element(Base):
 
 class Note(Base):
     """
-    String which can be assoicated with an arbitrary Element.
+    String which can be associated with an arbitrary Element.
     """
     __tablename__ = 'note'
 
@@ -129,8 +123,8 @@ class Note(Base):
                      primary_key=True)
     note = Column(String)
 
-    element_notes = relationship('ElementNote')
-    elements = association_proxy('element_note', 'element')
+    element_id = Column(Integer, ForeignKey(Element.element_id))
+    element = relationship('Element', back_populates='notes')
 
     def __repr__(self):
         return "<Note(name='%s')>" % (self.name)
@@ -140,21 +134,3 @@ class Note(Base):
         d['note'] = self.note
 
         return d
-
-
-class ElementNote(Base):
-    """
-    Association table for Notes and Elements with many-to-one semantics.
-    """
-
-    __tablename__ = 'element_note'
-
-    note_id = Column(Integer, ForeignKey(Note.note_id),
-                     primary_key=True)
-    element_id = Column(Integer, ForeignKey(Element.element_id),
-                        primary_key=True)
-
-    note = relationship(Note,
-                        foreign_keys=[note_id])
-    element = relationship(Element,
-                           foreign_keys=[element_id])
