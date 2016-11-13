@@ -75,6 +75,7 @@ if __name__=='__main__':
     reddit = make_reddit(session)
     reddit.add_note('Reddit note 1')
     reddit.add_note('Reddit note 2')
+    df1.add_element(reddit)
 
     note1 = Note(note='Hey, this is my note!', element=df1)
     session.add(note1)

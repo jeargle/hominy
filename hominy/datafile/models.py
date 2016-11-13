@@ -32,8 +32,15 @@ class DataFile(Element):
     # "os.path.join(self.path, self.name)" is the full path
     path = Column(String)
 
-    datafile_elements = relationship('DataFileElement')
-    elements = association_proxy('datafile_element', 'element')
+    datafile_elements = relationship(
+        'DataFileElement', back_populates='datafile',
+        foreign_keys='DataFileElement.datafile_id',
+        collection_class=set,
+    )
+    elements = association_proxy(
+        'datafile_elements', 'element',
+        creator=lambda el: DataFileElement(element=el)
+    )
 
     __mapper_args__ = {
         'polymorphic_identity': CLS_INDEX['DataFile'],
@@ -54,6 +61,9 @@ class DataFile(Element):
         d['path'] = self.path
 
         return d    
+
+    def add_element(self, element):
+        self.elements.add(element)
 
 
 class DataFileElement(Base):

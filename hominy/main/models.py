@@ -15,6 +15,8 @@ from sqlalchemy.orm import sessionmaker, relationship
 
 from guid import GUID
 
+# from hominy.datafile.models import DataFileElement
+
 
 Base = declarative_base()
 
@@ -65,10 +67,14 @@ class Element(Base):
     notes = relationship('Note', back_populates='element')
 
     datafile_elements = relationship(
-            'DataFileElement', back_populates='element',
-            foreign_keys='DataFileElement.element_id',
+        'DataFileElement', back_populates='element',
+        foreign_keys='DataFileElement.element_id',
+        collection_class=set,
     )
-    datafiles = association_proxy('datafile_elements', 'datafile')
+    datafiles = association_proxy(
+        'datafile_elements',
+        'datafile'
+    )
 
 
     __mapper_args__ = {
@@ -112,9 +118,6 @@ class Element(Base):
         note = Note(note=note_string, element=self)
         self.notes.append(note)
 
-    def add_datafile(self, df):
-        self.datafiles.append(df)
-    
     def __str__(self):
         return unicode(self).encode('utf-8')
 
