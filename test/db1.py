@@ -70,9 +70,11 @@ if __name__=='__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    reddit = make_reddit(session)
     freenode = make_freenode(session)
     df1 = make_datafile(session)
+    reddit = make_reddit(session)
+    reddit.add_note('Reddit note 1')
+    reddit.add_note('Reddit note 2')
 
     note1 = Note(note='Hey, this is my note!', element=df1)
     session.add(note1)

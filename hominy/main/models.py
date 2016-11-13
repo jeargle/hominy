@@ -64,6 +64,13 @@ class Element(Base):
 
     notes = relationship('Note', back_populates='element')
 
+    datafile_elements = relationship(
+            'DataFileElement', back_populates='element',
+            foreign_keys='DataFileElement.element_id',
+    )
+    datafiles = association_proxy('datafile_elements', 'datafile')
+
+
     __mapper_args__ = {
         'polymorphic_on': element_class,
         'polymorphic_identity': CLS_INDEX['Element']
@@ -101,9 +108,12 @@ class Element(Base):
             #'priors' : [(prior.uuid, prior.label) for prior in self.priors]
         }
 
-    def add_note(self, note):
-        
-        return
+    def add_note(self, note_string):
+        note = Note(note=note_string, element=self)
+        self.notes.append(note)
+
+    def add_datafile(self, df):
+        self.datafiles.append(df)
     
     def __str__(self):
         return unicode(self).encode('utf-8')

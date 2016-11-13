@@ -67,3 +67,6 @@ class DataFileElement(Base):
                          primary_key=True)
     element_id = Column(Integer, ForeignKey(Element.element_id),
                         primary_key=True)
+
+    datafile = relationship(DataFile, foreign_keys=[datafile_id])
+    element = relationship(Element, foreign_keys=[element_id])
