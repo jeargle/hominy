@@ -66,7 +66,7 @@ class NoteHandler(web.RequestHandler):
         # Create
         if uuid is None and not fragment:
             other_opts = {}
-            note_dict = api.create_note(steps, session=session, **other_opts)
+            note_dict = api.create_note(session=session, **other_opts)
             self.write(json.dumps(note_dict))
             self.finish()
         else:
@@ -92,6 +92,8 @@ main_urls = [
     (r'/app/(.*)/(.*)', AppHandler),
     (r'/static/(.*)', web.StaticFileHandler, {'path': '../../www/'}),
     (r'/main/static/(.*)', web.StaticFileHandler, {'path': app_path}),
+
+    (r'/api/notes(/[a-f\d\-]+)?(/.*)?', NoteHandler),
 ]
 
 urls = (

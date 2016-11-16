@@ -29,7 +29,7 @@ class PersonHandler(web.RequestHandler):
     @web.asynchronous
     def get(self, uuid, fragment=None):
         if uuid is None or fragment is None:
-            api.request_person(self, uuid)
+            api.request_person(self, uuid, session=session)
         else:
             raise Exception('Invalid UUID: ' + uuid + '/' + fragment)
 
@@ -40,7 +40,7 @@ class PersonHandler(web.RequestHandler):
         # Create
         if uuid is None and not fragment:
             other_opts = {}
-            person_dict = api.create_person(steps, **other_opts)
+            person_dict = api.create_person(session=session, **other_opts)
             self.write(json.dumps(person_dict))
             self.finish()
         else:
@@ -52,7 +52,7 @@ class PersonHandler(web.RequestHandler):
         # Update
         if uuid is not None:
             other_opts = {}
-            person_dict = api.update_person(uuid, **other_opts)
+            person_dict = api.update_person(uuid, session=session, **other_opts)
             self.write(json.dumps(person_dict))
             self.finish()
         else:

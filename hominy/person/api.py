@@ -24,15 +24,27 @@ def create_person(session=None, **values):
 
 
 def request_person(filters=None, session=None):
+    filters = {'uuid': uuid}
+
+    # Person
+    q = session.query(Person)
+    q = __apply_filters(q, Person, session, **filters)
+
+    person_dict = q.first().as_dict()
+
+    return person_dict
+
+
+def request_people(filters=None, session=None):
     filters = filters or {}
 
     # Person
     q = session.query(Person)
     q = __apply_filters(q, Person, session, **filters)
 
-    p_dicts = [p.as_dict() for p in q.all()]
+    person_dicts = [p.as_dict() for p in q.all()]
 
-    return p_dicts
+    return person_dicts
 
 
 def update_person():
