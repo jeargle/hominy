@@ -18,6 +18,10 @@ from hominy.person.app import urls as person_urls
 # from hominy.organization.app import urls as organization_urls
 # from hominy.webpage.app import urls as webpage_urls
 
+
+engine = create_engine('sqlite:///test.db', echo=True)
+Base.metadata.create_all(engine)
+
 # Absolute paths
 app_path = os.path.split(os.path.abspath(__file__))[0]
 pkg_path = os.path.split(app_path)[0]
@@ -51,7 +55,7 @@ class NoteHandler(web.RequestHandler):
     @web.asynchronous
     def get(self, uuid, fragment=None):
         if uuid is None or fragment is None:
-            api.request_note(self, uuid)
+            api.request_note(self, uuid, session=session)
         else:
             raise Exception('Invalid UUID: ' + uuid + '/' + fragment)
 
@@ -62,7 +66,7 @@ class NoteHandler(web.RequestHandler):
         # Create
         if uuid is None and not fragment:
             other_opts = {}
-            note_dict = api.create_note(steps, **other_opts)
+            note_dict = api.create_note(steps, session=session, **other_opts)
             self.write(json.dumps(note_dict))
             self.finish()
         else:
@@ -107,8 +111,11 @@ app = web.Application(
 
 
 if __name__=='__main__':
-    import logging
-    logging.getLogger().setLevel(logging.DEBUG)
+    # import logging
+    # logging.getLogger().setLevel(logging.DEBUG)
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
     app.listen(8001)
     ioloop.IOLoop.instance().start()

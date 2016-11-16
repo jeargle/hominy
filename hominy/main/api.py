@@ -75,7 +75,19 @@ def create_note(session=None, **values):
     return note.as_dict()
 
 
-def request_note(filters=None, session=None):
+def request_note(uuid, session=None):
+    filters = {'uuid': uuid}
+
+    # Note
+    q = session.query(Note)
+    q = __apply_filters(q, Note, session, **filters)
+
+    note_dict = q.first().as_dict()
+
+    return note_dict
+
+
+def request_notes(filters=None, session=None):
     filters = filters or {}
 
     # Note
