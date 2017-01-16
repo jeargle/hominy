@@ -13,6 +13,7 @@ from sqlalchemy.pool import NullPool
 from tornado import web, ioloop
 
 # from hominy.datafile.app import urls as datafile_urls
+from hominy.main.models import Element, Base
 from hominy.person.app import urls as person_urls
 # from hominy.place.app import urls as place_urls
 # from hominy.organization.app import urls as organization_urls
@@ -43,7 +44,7 @@ class AppHandler(web.RequestHandler):
         
 class IndexHandler(web.RequestHandler):
     def get(self):
-        self.render('hominy.html')
+        self.render('html/hominy.html')
 
 
 class NoteHandler(web.RequestHandler):
@@ -91,7 +92,7 @@ main_urls = [
     (r'/', IndexHandler),
     (r'/app/(.*)/(.*)', AppHandler),
     (r'/static/(.*)', web.StaticFileHandler, {'path': '../../www/'}),
-    (r'/main/static/(.*)', web.StaticFileHandler, {'path': app_path}),
+    (r'/main/(.*)', web.StaticFileHandler, {'path': app_path}),
 
     (r'/api/notes(/[a-f\d\-]+)?(/.*)?', NoteHandler),
 ]

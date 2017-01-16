@@ -5,24 +5,28 @@
   Hominy
   </title>
 
-  <link rel="stylesheet" href="/local_static/css/reset.css" type="text/css">
-  <link type="text/css" href="/local_static/css/hominy.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/main/css/reset.css" type="text/css">
+  <link type="text/css" href="/main/css/hominy.css" rel="stylesheet"/>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.1/d3.min.js"></script>
 
-  <script type="text/javascript" src="/local_static/js/hominy.js?refresh=true"></script>
+  <script type="text/javascript" src="/main/js/hominy.js?refresh=true"></script>
 
 </head>
 
 <body>
 
+  <div id="menubar1">
+    <a href="app/people" class="menubar1-btn">People</a>
+    <a href="app/places" class="menubar1-btn">Places</a>
+    <a href="app/organizations" class="menubar1-btn">Organizations</a>
+  </div>
+  
   <div id="container">
     <div id="content">
-      <button type="button" id="add-button">Add Element</button>
-      <button type="button" id="delete-button">Remove Element</button>
       <ul id="dynamic-list">
       </ul>
     </div>

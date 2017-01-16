@@ -3,13 +3,13 @@
 
 # CRUD functions for hominy models
 
-from hominy.main.models import Base, Element, Place
-from hominy.main.models import Organization, Person, Webpage
-from hominy.main.models import Account, DataFile
+from hominy.main.models import Base, Element
 
+# from hominy.datafile.models import DataFile
 from hominy.organization.models import Organization
 from hominy.person.models import Person
 from hominy.place.models import Place
+from hominy.webpage.models import Webpage, Account
 
 
 def __apply_element_filters(query, session=None, **filters):

@@ -7,7 +7,7 @@ from tornado import web
 import traceback
 
 import hominy.person.api as api
-from hominy.person.models import WorkflowInstance
+from hominy.person.models import Person
 
 
 # Absolute paths
