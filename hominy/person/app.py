@@ -60,8 +60,17 @@ class PersonHandler(web.RequestHandler):
         return
 
 
+class PersonLibHandler(web.RequestHandler):
+    """
+    Person library page.
+    """
+    pass
+
 
 urls = [
     (r'/api/people(/[a-f\d\-]+)?(/.*)?', PersonHandler),
+
+    (r'/person/static/(.*)', web.StaticFileHandler, {'path': local_static}),
+    (r'/app/person/lib', PersonLibHandler),
 ]
 
