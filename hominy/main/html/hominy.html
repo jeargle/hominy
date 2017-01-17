@@ -1,9 +1,7 @@
 <html>
 
 <head>
-  <title>
-  Hominy
-  </title>
+  <title>{% block title %} hominy {% end %}</title>
 
   <link rel="stylesheet" href="/main/css/reset.css" type="text/css">
   <link type="text/css" href="/main/css/hominy.css" rel="stylesheet"/>
@@ -15,22 +13,36 @@
 
   <script type="text/javascript" src="/main/js/hominy.js?refresh=true"></script>
 
+  {% block app_resources%}
+
+  {% end %}
+
+  {% block local_resources %}
+
+  {% end %}
+
 </head>
 
 <body>
 
+  {% block menubar1 %}
   <div id="menubar1">
     <a href="app/people" class="menubar1-btn">People</a>
     <a href="app/places" class="menubar1-btn">Places</a>
     <a href="app/organizations" class="menubar1-btn">Organizations</a>
   </div>
+  {% end %}
+
+  {% block menubar2 %}
+  {% end %}
   
+  {% block main-view %}
   <div id="container">
     <div id="content">
-      <ul id="dynamic-list">
-      </ul>
+      <span style="font-size:64px;">HOMINY</span>
     </div>
   </div>
+  {% end %}
 
 </body>
 </html>
