@@ -57,7 +57,7 @@ def __apply_filters(query, target, session=None, **filters):
             query = query.filter(target.getattr(tf) == filters[tf])
             filters.pop(tf)
 
-    query = __apply_element_filters(query, session, filters)
+    query = __apply_element_filters(query, session, **filters)
     return query
 
 

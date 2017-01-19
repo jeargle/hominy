@@ -3,16 +3,17 @@
 import os.path
 import json
 
-from sqlalchemy import create_engine, event
-from sqlalchemy.engine import Engine
+# from sqlalchemy import create_engine, event
+# from sqlalchemy.engine import Engine
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+# from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 
 from tornado import web, ioloop
 
 # from hominy.datafile.app import urls as datafile_urls
+from hominy.main.db import get_session
 from hominy.main.models import Element, Base
 from hominy.person.app import urls as person_urls
 # from hominy.place.app import urls as place_urls
@@ -20,8 +21,6 @@ from hominy.person.app import urls as person_urls
 # from hominy.webpage.app import urls as webpage_urls
 
 
-engine = create_engine('sqlite:///test.db', echo=True)
-Base.metadata.create_all(engine)
 
 # Absolute paths
 app_path = os.path.split(os.path.abspath(__file__))[0]
@@ -34,7 +33,7 @@ DOC_STATIC = os.path.join(hominy_path, 'doc', 'html')
 
 
 class AppHandler(web.RequestHandler):
-    @web.authenticated
+    # @web.authenticated
     @web.asynchronous
     def get(self, app, mode):
         if not mode:
@@ -98,12 +97,12 @@ main_urls = [
 ]
 
 urls = (
-    main_urls +
     # datafile_urls +
-    person_urls
+    person_urls +
     # place_urls +
     # organization_urls +
     # webpage_urls
+    main_urls
 )
 
 app = web.Application(
@@ -117,8 +116,9 @@ if __name__=='__main__':
     # import logging
     # logging.getLogger().setLevel(logging.DEBUG)
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    # Session = sessionmaker(bind=engine)
+    # session = Session()
+    session = get_session()
 
     app.listen(8001)
     ioloop.IOLoop.instance().start()

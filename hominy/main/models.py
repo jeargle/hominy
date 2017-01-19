@@ -66,15 +66,16 @@ class Element(Base):
 
     notes = relationship('Note', back_populates='element')
 
-    datafile_elements = relationship(
-        'DataFileElement', back_populates='element',
-        foreign_keys='DataFileElement.element_id',
-        collection_class=set,
-    )
-    datafiles = association_proxy(
-        'datafile_elements',
-        'datafile'
-    )
+    # XXX - only commented out to get People pages up and running
+    # datafile_elements = relationship(
+    #     'DataFileElement', back_populates='element',
+    #     foreign_keys='DataFileElement.element_id',
+    #     collection_class=set,
+    # )
+    # datafiles = association_proxy(
+    #     'datafile_elements',
+    #     'datafile'
+    # )
 
 
     __mapper_args__ = {
@@ -110,7 +111,7 @@ class Element(Base):
             'desc'   : self.desc,
             'created_at': self.created_timestamp.isoformat() + 'Z',
             'updated_at': self.updated_timestamp.isoformat() + 'Z' if self.updated_timestamp else None,
-            'meta'   : self.meta,
+            # 'meta'   : self.meta,
             #'priors' : [(prior.uuid, prior.label) for prior in self.priors]
         }
 
