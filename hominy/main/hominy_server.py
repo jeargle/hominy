@@ -17,7 +17,7 @@ from hominy.main.db import get_session
 from hominy.main.models import Element, Base
 from hominy.person.app import urls as person_urls
 from hominy.place.app import urls as place_urls
-# from hominy.organization.app import urls as organization_urls
+from hominy.organization.app import urls as organization_urls
 # from hominy.webpage.app import urls as webpage_urls
 
 
@@ -100,7 +100,7 @@ urls = (
     # datafile_urls +
     person_urls +
     place_urls +
-    # organization_urls +
+    organization_urls +
     # webpage_urls
     main_urls
 )

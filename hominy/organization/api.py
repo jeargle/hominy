@@ -24,7 +24,7 @@ def create_organization(session=None, **values):
     return org.as_dict()
 
 
-def request_organization(filters=None, session=None):
+def request_organizations(filters=None, session=None):
     filters = filters or {}
 
     # Organization
