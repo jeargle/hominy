@@ -16,7 +16,7 @@ from tornado import web, ioloop
 from hominy.main.db import get_session
 from hominy.main.models import Element, Base
 from hominy.person.app import urls as person_urls
-# from hominy.place.app import urls as place_urls
+from hominy.place.app import urls as place_urls
 # from hominy.organization.app import urls as organization_urls
 # from hominy.webpage.app import urls as webpage_urls
 
@@ -40,7 +40,7 @@ class AppHandler(web.RequestHandler):
             mode = app
         self.render(os.path.join(app, 'html', (mode + '.html')))
 
-        
+
 class IndexHandler(web.RequestHandler):
     def get(self):
         self.render('html/hominy.html')
@@ -99,7 +99,7 @@ main_urls = [
 urls = (
     # datafile_urls +
     person_urls +
-    # place_urls +
+    place_urls +
     # organization_urls +
     # webpage_urls
     main_urls
@@ -122,4 +122,3 @@ if __name__=='__main__':
 
     app.listen(8001)
     ioloop.IOLoop.instance().start()
-  

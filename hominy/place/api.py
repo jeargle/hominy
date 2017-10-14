@@ -23,7 +23,7 @@ def create_place(session=None, **values):
     return place.as_dict()
 
 
-def request_place(filters=None, session=None):
+def request_places(filters=None, session=None):
     filters = filters or {}
 
     # Place
@@ -39,4 +39,3 @@ def update_place():
 
 def delete_place():
     pass
-
