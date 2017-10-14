@@ -116,9 +116,5 @@ if __name__=='__main__':
     # import logging
     # logging.getLogger().setLevel(logging.DEBUG)
 
-    # Session = sessionmaker(bind=engine)
-    # session = Session()
-    session = get_session()
-
     app.listen(8001)
     ioloop.IOLoop.instance().start()

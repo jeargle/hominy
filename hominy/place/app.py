@@ -35,7 +35,7 @@ class PlaceHandler(web.RequestHandler):
     @web.asynchronous
     def get(self, uuid, fragment=None):
         if uuid is None or fragment is None:
-            api.request_place(self, uuid, session=session)
+            api.request_place(uuid, session=session)
         else:
             raise Exception('Invalid UUID: ' + uuid + '/' + fragment)
 

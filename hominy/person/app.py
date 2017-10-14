@@ -34,10 +34,18 @@ class PersonHandler(web.RequestHandler):
 
     @web.asynchronous
     def get(self, uuid, fragment=None):
-        if uuid is None or fragment is None:
-            api.request_person(self, uuid, session=session)
+        session = get_session()
+
+        if uuid is not None:
+            person_dict = api.request_person(uuid, session=session)
+            self.write(json.dumps(person_dict))
+        elif uuid is None or fragment is None:
+            person_dict = api.request_people(session=session)
+            self.write(json.dumps(person_dict))
         else:
-            raise Exception('Invalid UUID: ' + uuid + '/' + fragment)
+            self.write(json.dumps({'error': 'Invalid UUID: ' + uuid + '/' + fragment}))
+        self.finish()
+        session.close()
 
         return
 
@@ -71,11 +79,8 @@ class PersonLibHandler(web.RequestHandler):
     Person library page.
     """
     def get(self, fragment=None):
-        session = get_session()
-        people = api.request_people(session=session)
         self.render(
             local_html + '/person.html',
-            people = people,
         )
 
 
@@ -87,4 +92,3 @@ urls = [
     (r'/person/js/(.*)', web.StaticFileHandler, {'path': local_js}),
     (r'/app/person/lib', PersonLibHandler),
 ]
-
